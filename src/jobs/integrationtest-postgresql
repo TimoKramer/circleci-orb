@@ -1,0 +1,16 @@
+description: |
+  Run integrationtests via ./bin/run-integration-tests using PostgreSQL.
+executor: leiningen
+docker:
+  - image: circleci/postgres:11-alpine
+    environment:
+      POSTGRES_USER: alice
+      POSTGRES_PASSWORD: foo
+      POSTGRES_DB: config-test
+steps:
+  - attach_workspace:
+      at: /home/circleci
+  - run:
+      name: Run Integrationtests
+      command: ./bin/run-integration-tests
+      no_output_timeout: 5m
