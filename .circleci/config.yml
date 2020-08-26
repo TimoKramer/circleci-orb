@@ -35,12 +35,12 @@ workflows:
   lint_pack-validate_publish-dev:
     unless: << pipeline.parameters.run-integration-tests >>
     jobs:
-      - orb-tools/lint
+            #- orb-tools/lint
       # pack your orb YAML files to a single orb.yml
       # validate the orb.yml file to ensure it is well-formed
-      - orb-tools/pack:
-          requires:
-            - orb-tools/lint
+      - orb-tools/pack
+              #requires:
+              #  - orb-tools/lint
 
       # release dev version of orb, for testing & possible publishing.
       # orb will be published as dev:alpha and dev:${CIRCLE_SHA1:0:7}.
@@ -49,7 +49,7 @@ workflows:
       # store CIRCLE_TOKEN as a project env var or Contexts resource
       # if using Contexts, add your context below
       - orb-tools/publish-dev:
-          orb-name: <orb-namespace>/<orb-name>
+          orb-name: mopedtobias/barfoo
           requires:
             - orb-tools/pack
 
@@ -81,11 +81,9 @@ workflows:
       # be skipped.
       # e.g. [semver:patch] will cause a patch version to be published.
       - orb-tools/dev-promote-prod-from-commit-subject:
-          orb-name: <orb-namespace>/<orb-name>
+          orb-name: mopedtobias/barfoo
 
-          add-pr-comment: true
-          bot-token-variable: GH_BOT_USER_TOKEN
-          bot-user: 
+          add-pr-comment: false
           fail-if-semver-not-indicated: true
           publish-version-tag: false
           requires:
